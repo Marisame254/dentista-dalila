@@ -4,10 +4,13 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "Consultorio dental de la Dra. Dalila - Servicios dentales profesionales y atención personalizada" } = Astro.props;
+const {
+  title,
+  description = "Consultorio dental de la Dra. Dalila - Servicios dentales profesionales y atención personalizada",
+} = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -18,16 +21,21 @@ const { title, description = "Consultorio dental de la Dra. Dalila - Servicios d
     <title>{title}</title>
 
     <!-- Calendly CSS -->
-    <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+    <link
+      href="https://assets.calendly.com/assets/external/widget.css"
+      rel="stylesheet"
+    />
   </head>
   <body class="bg-gray-50 text-gray-900">
     <slot />
 
     <!-- Calendly Script -->
-    <script is:inline src="https://assets.calendly.com/assets/external/widget.js"></script>
+    <script
+      is:inline
+      src="https://assets.calendly.com/assets/external/widget.js"></script>
   </body>
 </html>
 
 <style is:global>
-  @import '../styles/global.css';
+  @import "../styles/global.css";
 </style>
