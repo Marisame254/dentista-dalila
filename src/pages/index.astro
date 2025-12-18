@@ -8,7 +8,7 @@ import Footer from "../components/Footer.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
 
 // CONFIGURACIÓN: Actualiza estos valores con tu información
-const WHATSAPP_NUMBER = "529514086411"; // Formato: Código de país + número (ej: 521234567890)
+const WHATSAPP_NUMBER = "529512183883"; // Formato: Código de país + número (ej: 521234567890)
 const CALENDLY_URL = "https://calendly.com/marisakirisame254/30min"; // Tu URL de Calendly
 ---
 
@@ -21,7 +21,7 @@ const CALENDLY_URL = "https://calendly.com/marisakirisame254/30min"; // Tu URL d
   <main>
     <Hero />
     <Services />
-    <Appointments calendlyUrl={CALENDLY_URL} />
+    <Appointments calendlyUrl={CALENDLY_URL} whatsappNumber={WHATSAPP_NUMBER} />
   </main>
 
   <Footer />

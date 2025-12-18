@@ -4,86 +4,135 @@
 
 <section
   id="inicio"
-  class="pt-20 bg-linear-to-br from-teal-50 via-white to-blue-50"
+  class="pt-20 bg-linear-to-br from-teal-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 transition-colors duration-300 overflow-hidden"
 >
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
     <div class="grid md:grid-cols-2 gap-12 items-center">
       <!-- Text Content -->
       <div class="space-y-6">
+        <div
+          class="inline-flex items-center px-4 py-2 bg-teal-100 dark:bg-teal-900/50 rounded-full text-teal-700 dark:text-teal-300 text-sm font-medium animate-fade-in"
+        >
+          <span class="w-2 h-2 bg-teal-500 rounded-full mr-2 animate-pulse"
+          ></span>
+          +10 años de experiencia
+        </div>
+
         <h1
-          class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight"
+          class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight animate-fade-in delay-100"
         >
           Tu sonrisa perfecta comienza con
-          <span class="text-teal-600">Dra. Dalila</span>
+          <span
+            class="text-teal-600 dark:text-teal-400 relative inline-block after:absolute after:bottom-2 after:left-0 after:w-full after:h-3 after:bg-teal-200 dark:after:bg-teal-800 after:-z-10 after:skew-y-1"
+            >Dra. Dalila</span
+          >
         </h1>
-        <p class="text-lg md:text-xl text-gray-600 leading-relaxed">
+
+        <p
+          class="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed animate-fade-in delay-200"
+        >
           Cuidado dental profesional con tecnología de vanguardia y un trato
           humano excepcional. Más de 10 años transformando sonrisas.
         </p>
 
         <!-- CTA Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4 pt-4">
+        <div class="flex flex-col sm:flex-row gap-4 pt-4 animate-fade-in delay-300">
           <a
             href="#citas"
-            class="bg-teal-600 text-white px-8 py-4 rounded-full hover:bg-teal-700 transition-all duration-300 text-center font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            class="group bg-teal-600 dark:bg-teal-500 text-white px-8 py-4 rounded-full hover:bg-teal-700 dark:hover:bg-teal-600 transition-all duration-300 text-center font-semibold shadow-lg shadow-teal-600/25 dark:shadow-teal-500/25 hover:shadow-xl hover:shadow-teal-600/30 transform hover:-translate-y-1 flex items-center justify-center gap-2"
           >
             Agendar Cita Ahora
+            <svg
+              class="w-5 h-5 transition-transform group-hover:translate-x-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
           </a>
           <a
             href="#servicios"
-            class="bg-white text-teal-600 border-2 border-teal-600 px-8 py-4 rounded-full hover:bg-teal-50 transition-all duration-300 text-center font-semibold"
+            class="bg-white dark:bg-gray-800 text-teal-600 dark:text-teal-400 border-2 border-teal-600 dark:border-teal-500 px-8 py-4 rounded-full hover:bg-teal-50 dark:hover:bg-gray-700 transition-all duration-300 text-center font-semibold"
           >
             Ver Servicios
           </a>
         </div>
 
         <!-- Features -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8">
-          <div class="flex items-center space-x-3">
-            <svg
-              class="w-6 h-6 text-teal-600 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 animate-fade-in delay-400">
+          <div
+            class="flex items-center space-x-3 p-3 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+          >
+            <div
+              class="w-10 h-10 bg-teal-100 dark:bg-teal-900/50 rounded-lg flex items-center justify-center"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span class="text-gray-700 font-medium">Atención Personalizada</span
+              <svg
+                class="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <span class="text-gray-700 dark:text-gray-300 font-medium text-sm"
+              >Atención Personalizada</span
             >
           </div>
-          <div class="flex items-center space-x-3">
-            <svg
-              class="w-6 h-6 text-teal-600 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div
+            class="flex items-center space-x-3 p-3 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+          >
+            <div
+              class="w-10 h-10 bg-teal-100 dark:bg-teal-900/50 rounded-lg flex items-center justify-center"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span class="text-gray-700 font-medium">Tecnología Moderna</span>
+              <svg
+                class="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                ></path>
+              </svg>
+            </div>
+            <span class="text-gray-700 dark:text-gray-300 font-medium text-sm"
+              >Tecnología Moderna</span
+            >
           </div>
-          <div class="flex items-center space-x-3">
-            <svg
-              class="w-6 h-6 text-teal-600 shrink-0"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+          <div
+            class="flex items-center space-x-3 p-3 rounded-xl bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm"
+          >
+            <div
+              class="w-10 h-10 bg-teal-100 dark:bg-teal-900/50 rounded-lg flex items-center justify-center"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span class="text-gray-700 font-medium"
+              <svg
+                class="w-5 h-5 text-teal-600 dark:text-teal-400 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                ></path>
+              </svg>
+            </div>
+            <span class="text-gray-700 dark:text-gray-300 font-medium text-sm"
               >Resultados Garantizados</span
             >
           </div>
@@ -91,25 +140,60 @@
       </div>
 
       <!-- Image/Visual -->
-      <div class="relative">
+      <div class="relative animate-slide-in-right">
         <div
-          class="relative z-10 rounded-3xl overflow-hidden shadow-2xl bg-linear-to-br from-teal-100 to-blue-100 aspect-square flex items-center justify-center"
+          class="relative z-10 rounded-3xl overflow-hidden shadow-2xl dark:shadow-teal-500/10 bg-linear-to-br from-teal-100 to-blue-100 dark:from-teal-900/30 dark:to-blue-900/30 aspect-square flex items-center justify-center ring-1 ring-gray-200 dark:ring-gray-700"
         >
           <img
             src="/consul.png"
             alt="Consultorio dental de la Dra. Dalila"
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
           />
         </div>
 
         <!-- Decorative elements -->
         <div
-          class="absolute -bottom-6 -right-6 w-72 h-72 bg-teal-200 rounded-full opacity-20 blur-3xl"
+          class="absolute -bottom-6 -right-6 w-72 h-72 bg-teal-400 dark:bg-teal-600 rounded-full opacity-20 blur-3xl animate-float"
         >
         </div>
         <div
-          class="absolute -top-6 -left-6 w-72 h-72 bg-blue-200 rounded-full opacity-20 blur-3xl"
+          class="absolute -top-6 -left-6 w-72 h-72 bg-blue-400 dark:bg-blue-600 rounded-full opacity-20 blur-3xl animate-float delay-500"
         >
+        </div>
+
+        <!-- Floating badge -->
+        <div
+          class="absolute -bottom-4 -left-4 md:bottom-8 md:-left-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-900/50 p-4 animate-float z-20"
+        >
+          <div class="flex items-center space-x-3">
+            <div
+              class="w-12 h-12 bg-teal-100 dark:bg-teal-900/50 rounded-xl flex items-center justify-center"
+            >
+              <svg
+                class="w-6 h-6 text-teal-600 dark:text-teal-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <p
+                class="text-2xl font-bold text-gray-900 dark:text-white leading-none"
+              >
+                500+
+              </p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                Pacientes felices
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -124,7 +208,8 @@
     >
       <path
         d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-        class="fill-white"></path>
+        class="fill-white dark:fill-gray-900 transition-colors duration-300"
+      ></path>
     </svg>
   </div>
 </section>
