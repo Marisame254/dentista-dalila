@@ -1,16 +1,31 @@
 ---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Services from "../components/Services.astro";
+import Appointments from "../components/Appointments.astro";
+import Footer from "../components/Footer.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
 
+// CONFIGURACIÓN: Actualiza estos valores con tu información
+const WHATSAPP_NUMBER = "529514086411"; // Formato: Código de país + número (ej: 521234567890)
+const CALENDLY_URL = "https://calendly.com/marisakirisame254/30min"; // Tu URL de Calendly
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout
+  title="Dra. Dalila - Consultorio Dental"
+  description="Cuidado dental profesional con la Dra. Dalila. Servicios de odontología general, estética dental, ortodoncia e implantes."
+>
+  <Header />
+
+  <main>
+    <Hero />
+    <Services />
+    <Appointments calendlyUrl={CALENDLY_URL} />
+  </main>
+
+  <Footer />
+
+  <!-- WhatsApp Floating Button -->
+  <WhatsAppButton phoneNumber={WHATSAPP_NUMBER} />
+</Layout>
