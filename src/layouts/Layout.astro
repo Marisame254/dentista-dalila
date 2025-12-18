@@ -1,4 +1,6 @@
 ---
+import SpeedInsights from "@vercel/speed-insights/astro";
+
 interface Props {
   title: string;
   description?: string;
@@ -49,6 +51,8 @@ const {
     <script
       is:inline
       src="https://assets.calendly.com/assets/external/widget.js"></script>
+
+    <SpeedInsights />
   </body>
 </html>
 
