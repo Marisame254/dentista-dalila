@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.notion.so)",
+      "mcp__notion__notion-fetch",
+      "mcp__notion__notion-create-pages",
+      "mcp__notion__notion-update-page",
+      "mcp__notion__notion-create-database",
+      "mcp__notion__notion-create-view"
+    ]
+  }
+}
