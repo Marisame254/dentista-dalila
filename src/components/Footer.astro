@@ -1,5 +1,14 @@
 ---
+import { site } from "../config/site";
 
+const fullAddress = [
+  site.address.street,
+  site.address.locality,
+  site.address.region,
+  site.address.postalCode,
+]
+  .filter(Boolean)
+  .join(", ");
 ---
 
 <footer
@@ -30,10 +39,12 @@
           personalizada y tecnología de última generación.
         </p>
 
-        <!-- Social links placeholder -->
+        <!-- Social links -->
         <div class="flex space-x-4 mt-6">
           <a
-            href="#"
+            href={site.social.facebook || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
             class="w-10 h-10 bg-gray-800 dark:bg-gray-900 rounded-full flex items-center justify-center hover:bg-teal-600 transition-colors duration-300"
             aria-label="Facebook"
           >
@@ -44,7 +55,9 @@
             </svg>
           </a>
           <a
-            href="#"
+            href={site.social.instagram || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
             class="w-10 h-10 bg-gray-800 dark:bg-gray-900 rounded-full flex items-center justify-center hover:bg-teal-600 transition-colors duration-300"
             aria-label="Instagram"
           >
@@ -149,8 +162,45 @@
               </svg>
             </div>
             <div>
-              <p class="text-white font-medium">WhatsApp</p>
-              <p class="text-gray-400 text-sm">Disponible para consultas</p>
+              <p class="text-white font-medium">Teléfono / WhatsApp</p>
+              <a
+                href={`https://wa.me/${site.whatsapp}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-400 text-sm hover:text-teal-400 transition-colors"
+              >
+                {site.phone}
+              </a>
+            </div>
+          </li>
+          <li
+            class="flex items-start space-x-3 p-3 bg-gray-800/50 dark:bg-gray-900/50 rounded-xl"
+          >
+            <div
+              class="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center shrink-0"
+            >
+              <svg
+                class="w-5 h-5 text-teal-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+            </div>
+            <div>
+              <p class="text-white font-medium">Dirección</p>
+              <p class="text-gray-400 text-sm">{fullAddress}</p>
             </div>
           </li>
           <li
@@ -174,7 +224,7 @@
             </div>
             <div>
               <p class="text-white font-medium">Horario</p>
-              <p class="text-gray-400 text-sm">Lun - Vie: 9:00 AM - 6:00 PM</p>
+              <p class="text-gray-400 text-sm">{site.openingHoursLabel}</p>
             </div>
           </li>
         </ul>

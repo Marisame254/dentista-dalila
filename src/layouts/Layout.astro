@@ -1,15 +1,71 @@
 ---
 import SpeedInsights from "@vercel/speed-insights/astro";
+import { site } from "../config/site";
 
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  type?: string;
 }
 
 const {
   title,
-  description = "Consultorio dental de la Dra. Dalila - Servicios dentales profesionales y atención personalizada",
+  description = site.description,
+  image = site.ogImage,
+  type = "website",
 } = Astro.props;
+
+// URLs absolutas para canonical / Open Graph (requieren `site` en astro.config.mjs)
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? site.url);
+const imageURL = new URL(image, Astro.site ?? site.url);
+
+// Datos estructurados Schema.org "Dentist" para SEO local / rich results
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Dentist",
+  name: site.legalName,
+  alternateName: site.name,
+  description: site.description,
+  image: imageURL.href,
+  url: site.url,
+  telephone: site.phone,
+  ...(site.email ? { email: site.email } : {}),
+  priceRange: site.priceRange,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: site.address.street,
+    addressLocality: site.address.locality,
+    addressRegion: site.address.region,
+    postalCode: site.address.postalCode,
+    addressCountry: site.address.country,
+  },
+  ...(site.geo
+    ? {
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: site.geo.lat,
+          longitude: site.geo.lng,
+        },
+      }
+    : {}),
+  areaServed: {
+    "@type": "City",
+    name: site.address.locality,
+  },
+  openingHoursSpecification: site.openingHours.map((h) => ({
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: h.days,
+    opens: h.opens,
+    closes: h.closes,
+  })),
+  sameAs: [site.social.facebook, site.social.instagram].filter(Boolean),
+  medicalSpecialty: "Dentistry",
+  availableService: site.services.map((s) => ({
+    "@type": "MedicalProcedure",
+    name: s,
+  })),
+};
 ---
 
 <!doctype html>
@@ -17,11 +73,38 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
     <meta name="theme-color" content="#0d9488" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
-    <title>{title}</title>
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="es_MX" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL} />
+
+    <!-- Datos estructurados (Schema.org Dentist) -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
 
     <!-- Calendly CSS -->
     <link

@@ -7,15 +7,15 @@ import Consultorio from "../components/Consultorio.astro";
 import Appointments from "../components/Appointments.astro";
 import Footer from "../components/Footer.astro";
 import WhatsAppButton from "../components/WhatsAppButton.astro";
+import { site } from "../config/site";
 
-// CONFIGURACIÓN
-const WHATSAPP_NUMBER = "529512183883"; // Formato: Código de país + número (ej: 521234567890)
-const CALENDLY_URL = "https://calendly.com/dalilasarai78902/nueva-reunion"; // URL de Calendly
+// Toda la configuración del negocio vive en src/config/site.ts
+const { locality } = site.address;
 ---
 
 <Layout
-  title="Dra. Dalila - Consultorio Dental"
-  description="Cuidado dental profesional con la Dra. Dalila. Servicios de odontología general, estética dental, ortodoncia e implantes."
+  title={`Dentista en ${locality} | ${site.name} — Consultorio Dental`}
+  description={`Consultorio dental de la ${site.name} en ${locality}. Odontología general, estética dental, ortodoncia, implantes y odontopediatría con atención personalizada. Agenda tu cita.`}
 >
   <Header />
 
@@ -23,11 +23,14 @@ const CALENDLY_URL = "https://calendly.com/dalilasarai78902/nueva-reunion"; // U
     <Hero />
     <Services />
     <Consultorio />
-    <Appointments calendlyUrl={CALENDLY_URL} whatsappNumber={WHATSAPP_NUMBER} />
+    <Appointments
+      calendlyUrl={site.calendlyUrl}
+      whatsappNumber={site.whatsapp}
+    />
   </main>
 
   <Footer />
 
   <!-- WhatsApp Floating Button -->
-  <WhatsAppButton phoneNumber={WHATSAPP_NUMBER} />
+  <WhatsAppButton phoneNumber={site.whatsapp} />
 </Layout>
