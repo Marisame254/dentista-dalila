@@ -1,0 +1,55 @@
+---
+import { site } from "../config/site";
+
+const { faq } = site;
+
+// Datos estructurados FAQPage para resultados enriquecidos
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((item) => ({
+    "@type": "Question",
+    name: item.question,
+    acceptedAnswer: { "@type": "Answer", text: item.answer },
+  })),
+};
+---
+
+{
+  faq.length > 0 && (
+    <section id="preguntas" class="py-16 md:py-24">
+      <div class="wrap grid gap-10 md:grid-cols-[0.8fr_1.2fr]">
+        <h2 class="section-title">Preguntas frecuentes</h2>
+
+        <div class="border-t border-gray-200 dark:border-gray-800">
+          {faq.map((item) => (
+            <details class="group border-b border-gray-200 dark:border-gray-800">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 py-5 text-lg font-semibold text-gray-900 dark:text-white [&::-webkit-details-marker]:hidden">
+                {item.question}
+                <svg
+                  class="h-5 w-5 shrink-0 text-gray-500 transition-transform group-open:rotate-45"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 5v14M5 12h14"
+                  />
+                </svg>
+              </summary>
+              <p class="max-w-[65ch] pb-5 leading-relaxed text-gray-600 dark:text-gray-400">
+                {item.answer}
+              </p>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    </section>
+  )
+}

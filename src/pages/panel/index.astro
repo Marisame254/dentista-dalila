@@ -1,0 +1,108 @@
+---
+import PanelLayout from "../../layouts/PanelLayout.astro";
+import AppointmentCard from "../../components/panel/AppointmentCard.astro";
+import { formatDate } from "../../lib/format";
+import { handlePanelPost } from "../../lib/panel";
+import { addDays, utcToZoned, zonedToUtc } from "../../lib/slots";
+import type { Appointment } from "../../lib/types";
+
+export const prerender = false;
+
+const response = await handlePanelPost(Astro);
+if (response) return response;
+
+const supabase = Astro.locals.supabase!;
+const today = utcToZoned(new Date()).date;
+const DAYS_SHOWN = 7;
+
+const [pendingResult, upcomingResult] = await Promise.all([
+  supabase
+    .from("appointments")
+    .select("*")
+    .eq("status", "pending")
+    .order("starts_at"),
+  supabase
+    .from("appointments")
+    .select("*")
+    .eq("status", "confirmed")
+    .gte("starts_at", zonedToUtc(today, "00:00").toISOString())
+    .lt("starts_at", zonedToUtc(addDays(today, DAYS_SHOWN), "00:00").toISOString())
+    .order("starts_at"),
+]);
+
+const loadError = pendingResult.error ?? upcomingResult.error;
+const pending = (pendingResult.data ?? []) as Appointment[];
+const upcoming = (upcomingResult.data ?? []) as Appointment[];
+
+// Agenda agrupada por día del consultorio
+const byDay = new Map<string, Appointment[]>();
+for (const appointment of upcoming) {
+  const day = utcToZoned(new Date(appointment.starts_at)).date;
+  byDay.set(day, [...(byDay.get(day) ?? []), appointment]);
+}
+---
+
+<PanelLayout title="Agenda">
+  {
+    loadError && (
+      <p
+        role="alert"
+        class="mb-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-950 dark:text-red-200"
+      >
+        No se pudieron cargar las citas. Recarga la página.
+      </p>
+    )
+  }
+
+  <section>
+    <h1 class="font-display text-2xl font-medium text-gray-900 dark:text-white">
+      Solicitudes por confirmar
+    </h1>
+    {
+      pending.length === 0 ? (
+        <p class="mt-3 text-gray-600 dark:text-gray-400">
+          No hay solicitudes pendientes.
+        </p>
+      ) : (
+        <div class="mt-4 grid gap-4 lg:grid-cols-2">
+          {pending.map((appointment) => (
+            <AppointmentCard appointment={appointment} />
+          ))}
+        </div>
+      )
+    }
+  </section>
+
+  <section class="mt-12">
+    <h2 class="font-display text-2xl font-medium text-gray-900 dark:text-white">
+      Próximos {DAYS_SHOWN} días
+    </h2>
+    {
+      byDay.size === 0 ? (
+        <p class="mt-3 text-gray-600 dark:text-gray-400">
+          No hay citas confirmadas esta semana.
+          <a
+            href="/panel/citas"
+            class="font-semibold text-teal-800 underline underline-offset-2 dark:text-teal-300"
+          >
+            Crear una cita
+          </a>
+        </p>
+      ) : (
+        [...byDay].map(([day, appointments]) => (
+          <div class="mt-6">
+            <h3 class="font-semibold text-gray-900 first-letter:uppercase dark:text-white">
+              {day === today ? "Hoy, " : ""}
+              {formatDate(appointments[0].starts_at)}
+            </h3>
+            <div class="mt-3 grid gap-4 lg:grid-cols-2">
+              {appointments.map((appointment) => (
+                <AppointmentCard appointment={appointment} />
+              ))}
+            </div>
+          </div>
+        ))
+      )
+    }
+  </section>
+</PanelLayout>

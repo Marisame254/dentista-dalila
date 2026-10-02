@@ -1,113 +1,475 @@
 ---
-interface Props {
-  calendlyUrl: string;
-  whatsappNumber?: string;
-}
+import WhatsAppIcon from "./WhatsAppIcon.astro";
+import { site } from "../config/site";
 
-const { calendlyUrl, whatsappNumber } = Astro.props;
+const whatsappUrl = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent("Hola! Me gustaría agendar una cita.")}`;
 ---
 
-<section
-  id="citas"
-  class="py-20 bg-linear-to-br from-gray-50 to-teal-50 dark:from-gray-950 dark:to-gray-900 transition-colors duration-300"
->
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section Header -->
-    <div class="text-center max-w-3xl mx-auto mb-12">
-      <span
-        class="inline-block px-4 py-2 bg-teal-100 dark:bg-teal-900/50 rounded-full text-teal-700 dark:text-teal-300 text-sm font-medium mb-4"
-      >
-        Reserva fácil y rápida
-      </span>
-      <h2
-        class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4"
-      >
-        Agenda tu Cita
-      </h2>
-      <p class="text-lg text-gray-600 dark:text-gray-400">
-        Selecciona el día y hora que mejor se ajuste a tu agenda. Es rápido y
-        fácil.
-      </p>
-    </div>
+<section id="citas" class="py-16 md:py-24">
+  <div class="wrap">
+    <h2 class="section-title">Agenda tu cita</h2>
+    <p class="section-lead">
+      Elige el día y la hora que prefieras. La doctora revisa tu solicitud y te
+      confirma por WhatsApp.
+    </p>
 
-    <!-- Calendly Widget -->
-    <div
-      class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-2xl dark:shadow-gray-900/50 overflow-hidden ring-1 ring-gray-200 dark:ring-gray-700"
-    >
-      <!-- Calendly inline widget -->
-      <div
-        class="calendly-inline-widget"
-        data-url={calendlyUrl}
-        style="min-width:320px;height:700px;"
-      >
-      </div>
-    </div>
+    <div class="mt-10 grid items-start gap-8 lg:grid-cols-[1.4fr_1fr]">
+      <!-- Booking form -->
+      <div class="card min-w-0 p-6 sm:p-8">
+        <form id="booking-form" class="space-y-7" novalidate>
+          <div>
+            <label for="booking-service" class="label">Servicio</label>
+            <select id="booking-service" name="service" class="field" required>
+              {site.services.map((service) => <option>{service}</option>)}
+            </select>
+          </div>
 
-    <!-- Alternative Contact -->
-    <div class="mt-12 text-center">
-      <div
-        class="inline-flex flex-col items-center bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg dark:shadow-gray-900/50 ring-1 ring-gray-200 dark:ring-gray-700"
-      >
-        <div
-          class="w-16 h-16 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mb-4"
-        >
-          <svg
-            class="w-8 h-8 text-green-600 dark:text-green-400"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"
-            ></path>
-          </svg>
-        </div>
-        <p class="text-gray-700 dark:text-gray-300 mb-4 font-medium">
-          ¿Prefieres agendar por WhatsApp?
-        </p>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mb-6 max-w-sm">
-          Escríbenos directamente y te ayudaremos a encontrar el mejor horario
-          para ti
-        </p>
-        {
-          whatsappNumber && (
-            <a
-              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Hola! Me gustaría agendar una cita.")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center space-x-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-full transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+          <fieldset class="min-w-0">
+            <legend class="label">Día</legend>
+            <div
+              id="booking-days"
+              class="-mx-1 flex gap-2 overflow-x-auto px-1 py-1 sm:flex-wrap"
             >
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-              </svg>
-              <span>Contactar por WhatsApp</span>
-            </a>
-          )
-        }
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="label">Hora</legend>
+            <div id="booking-slots" class="flex flex-wrap gap-2"></div>
+            <p
+              id="booking-slots-status"
+              class="text-sm text-gray-600 dark:text-gray-400"
+              aria-live="polite"
+            >
+              Elige un día para ver los horarios disponibles.
+            </p>
+          </fieldset>
+
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="booking-name" class="label">Nombre completo</label>
+              <input
+                id="booking-name"
+                name="name"
+                type="text"
+                class="field"
+                autocomplete="name"
+                maxlength="80"
+                required
+              />
+            </div>
+            <div>
+              <label for="booking-phone" class="label"
+                >Teléfono con WhatsApp</label
+              >
+              <input
+                id="booking-phone"
+                name="phone"
+                type="tel"
+                class="field"
+                autocomplete="tel"
+                inputmode="tel"
+                placeholder="951 123 4567"
+                maxlength="20"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="booking-note" class="label"
+              >Motivo de la consulta (opcional)</label
+            >
+            <textarea
+              id="booking-note"
+              name="note"
+              class="field"
+              rows="3"
+              maxlength="500"></textarea>
+          </div>
+
+          <!-- Campo trampa para bots: oculto para las personas -->
+          <div class="hidden" aria-hidden="true">
+            <label>
+              Sitio web
+              <input name="website" type="text" tabindex="-1" autocomplete="off" />
+            </label>
+          </div>
+
+          <label
+            class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300"
+          >
+            <input
+              name="consent"
+              type="checkbox"
+              class="mt-0.5 h-4 w-4 accent-teal-700"
+              required
+            />
+            <span>
+              Acepto el
+              <a
+                href="/privacidad"
+                class="font-semibold text-teal-700 underline underline-offset-2 dark:text-teal-300"
+                >aviso de privacidad</a
+              >
+              y que me contacten por WhatsApp sobre mi cita.
+            </span>
+          </label>
+
+          <p
+            id="booking-error"
+            class="hidden rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-950 dark:text-red-200"
+            role="alert"
+          >
+          </p>
+
+          <button type="submit" class="btn btn-primary w-full sm:w-auto">
+            Solicitar cita
+          </button>
+
+          <noscript>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              Para agendar en línea necesitas activar JavaScript. También puedes
+              escribirnos por WhatsApp.
+            </p>
+          </noscript>
+        </form>
+
+        <!-- Shown after a successful request -->
+        <div id="booking-success" class="hidden" tabindex="-1">
+          <h3
+            class="font-display text-2xl font-medium text-gray-900 dark:text-white"
+          >
+            Solicitud enviada
+          </h3>
+          <p class="mt-3 leading-relaxed text-gray-700 dark:text-gray-300">
+            Recibimos tu solicitud para el
+            <strong id="booking-success-when"></strong>. La doctora te
+            confirmará por WhatsApp; hasta entonces la cita queda pendiente.
+          </p>
+          <button
+            id="booking-again"
+            type="button"
+            class="btn btn-secondary mt-6"
+          >
+            Solicitar otra cita
+          </button>
+        </div>
+      </div>
+
+      <!-- Other ways to reach the practice -->
+      <div class="min-w-0 space-y-6">
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            ¿Prefieres WhatsApp?
+          </h3>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">
+            Escríbenos y te ayudamos a encontrar un horario.
+          </p>
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-whatsapp mt-4"
+          >
+            <WhatsAppIcon />
+            Escribir por WhatsApp
+          </a>
+        </div>
+
+        <div class="card p-6">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+            ¿Tienes una duda?
+          </h3>
+          <p class="mt-2 text-gray-600 dark:text-gray-400">
+            Déjanos tu mensaje y te respondemos por WhatsApp.
+          </p>
+
+          <form id="message-form" class="mt-4 space-y-4" novalidate>
+            <div>
+              <label for="message-name" class="label">Nombre</label>
+              <input
+                id="message-name"
+                name="name"
+                type="text"
+                class="field"
+                autocomplete="name"
+                maxlength="80"
+                required
+              />
+            </div>
+            <div>
+              <label for="message-phone" class="label"
+                >Teléfono con WhatsApp</label
+              >
+              <input
+                id="message-phone"
+                name="phone"
+                type="tel"
+                class="field"
+                autocomplete="tel"
+                inputmode="tel"
+                maxlength="20"
+                required
+              />
+            </div>
+            <div>
+              <label for="message-body" class="label">Mensaje</label>
+              <textarea
+                id="message-body"
+                name="body"
+                class="field"
+                rows="3"
+                maxlength="1000"
+                required></textarea>
+            </div>
+
+            <div class="hidden" aria-hidden="true">
+              <label>
+                Sitio web
+                <input
+                  name="website"
+                  type="text"
+                  tabindex="-1"
+                  autocomplete="off"
+                />
+              </label>
+            </div>
+
+            <label
+              class="flex items-start gap-3 text-sm text-gray-700 dark:text-gray-300"
+            >
+              <input
+                name="consent"
+                type="checkbox"
+                class="mt-0.5 h-4 w-4 accent-teal-700"
+                required
+              />
+              <span>
+                Acepto el
+                <a
+                  href="/privacidad"
+                  class="font-semibold text-teal-700 underline underline-offset-2 dark:text-teal-300"
+                  >aviso de privacidad</a
+                >.
+              </span>
+            </label>
+
+            <p
+              id="message-status"
+              class="hidden rounded-lg px-4 py-3 text-sm"
+              role="alert"
+            >
+            </p>
+
+            <button type="submit" class="btn btn-secondary">
+              Enviar mensaje
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <script>
-  // Initialize Calendly widget
-  declare global {
-    interface Window {
-      Calendly?: {
-        initInlineWidget: (config: {
-          url: string;
-          parentElement: Element | null;
-        }) => void;
-      };
+  import { actions, isInputError } from "astro:actions";
+  import { formatClock } from "../lib/format";
+  import { bookableDates } from "../lib/slots";
+
+  const CHIP =
+    "relative cursor-pointer whitespace-nowrap rounded-lg border border-gray-300 bg-white px-3.5 py-2 text-sm font-medium text-gray-800 hover:border-teal-700 has-checked:border-teal-700 has-checked:bg-teal-700 has-checked:text-white has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-teal-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-teal-400 dark:has-checked:border-teal-400 dark:has-checked:bg-teal-400 dark:has-checked:text-gray-950";
+  const ERROR_CLASSES =
+    "bg-red-50 text-red-800 dark:bg-red-950 dark:text-red-200";
+  const OK_CLASSES =
+    "bg-teal-50 text-teal-900 dark:bg-teal-950 dark:text-teal-100";
+
+  const dayChip = new Intl.DateTimeFormat("es-MX", {
+    timeZone: "UTC",
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+  const dayLong = new Intl.DateTimeFormat("es-MX", {
+    timeZone: "UTC",
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+  const asDate = (date: string) => new Date(`${date}T12:00:00Z`);
+
+  /** Orden en que aparecen los campos, para avisar primero del más alto */
+  const FIELD_ORDER = ["service", "date", "time", "name", "phone", "note", "body"];
+
+  /** Mensaje para la persona a partir del error de una Action */
+  function errorMessage(error: unknown): string {
+    if (isInputError(error)) {
+      const fields = error.fields as Record<string, string[] | undefined>;
+      const names = [...FIELD_ORDER, ...Object.keys(fields)];
+      const first = names.map((name) => fields[name]?.[0]).find(Boolean);
+      if (first) return first;
     }
+    if (error instanceof Error && error.message) return error.message;
+    return "No pudimos enviar tu solicitud. Intenta de nuevo o escríbenos por WhatsApp.";
   }
 
-  if (typeof window !== "undefined" && window.Calendly) {
-    window.Calendly.initInlineWidget({
-      url:
-        document
-          .querySelector(".calendly-inline-widget")
-          ?.getAttribute("data-url") || "",
-      parentElement: document.querySelector(".calendly-inline-widget"),
+  function radioChip(name: string, value: string, text: string): HTMLElement {
+    const label = document.createElement("label");
+    label.className = CHIP;
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = name;
+    input.value = value;
+    input.className = "sr-only";
+    label.append(input, text);
+    return label;
+  }
+
+  // --- Solicitud de cita ---------------------------------------------------
+  const form = document.querySelector<HTMLFormElement>("#booking-form");
+  const days = document.querySelector<HTMLElement>("#booking-days");
+  const slots = document.querySelector<HTMLElement>("#booking-slots");
+  const slotsStatus = document.querySelector<HTMLElement>(
+    "#booking-slots-status",
+  );
+  const bookingError = document.querySelector<HTMLElement>("#booking-error");
+  const success = document.querySelector<HTMLElement>("#booking-success");
+  const successWhen = document.querySelector<HTMLElement>(
+    "#booking-success-when",
+  );
+  const again = document.querySelector<HTMLElement>("#booking-again");
+
+  if (form && days && slots && slotsStatus && bookingError) {
+    const submit = form.querySelector<HTMLButtonElement>("button[type=submit]");
+    let requestId = 0;
+
+    const showError = (message: string) => {
+      bookingError.textContent = message;
+      bookingError.classList.toggle("hidden", !message);
+    };
+
+    async function loadSlots(date: string) {
+      const current = ++requestId;
+      slots!.replaceChildren();
+      slotsStatus!.textContent = "Buscando horarios…";
+
+      const { data, error } = await actions.getAvailability({ date });
+      if (current !== requestId) return; // la persona ya eligió otro día
+
+      if (error) {
+        slotsStatus!.textContent = errorMessage(error);
+        return;
+      }
+      if (data.slots.length === 0) {
+        slotsStatus!.textContent =
+          "Ya no hay horarios libres ese día. Prueba con otro.";
+        return;
+      }
+      slotsStatus!.textContent = "";
+      slots!.append(
+        ...data.slots.map((time) => radioChip("time", time, formatClock(time))),
+      );
+    }
+
+    for (const date of bookableDates()) {
+      days.append(
+        radioChip("date", date, dayChip.format(asDate(date)).replace(" de ", " ")),
+      );
+    }
+    if (days.childElementCount === 0) {
+      slotsStatus.textContent =
+        "Por ahora no hay días disponibles. Escríbenos por WhatsApp.";
+    }
+
+    days.addEventListener("change", (event) => {
+      showError("");
+      loadSlots((event.target as HTMLInputElement).value);
+    });
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      showError("");
+
+      const data = new FormData(form);
+      const date = String(data.get("date") ?? "");
+      const time = String(data.get("time") ?? "");
+      if (!date || !time) {
+        showError("Elige el día y la hora de tu cita.");
+        return;
+      }
+
+      submit?.setAttribute("disabled", "");
+      const { error } = await actions.requestAppointment({
+        service: String(data.get("service")) as never,
+        date,
+        time,
+        name: String(data.get("name") ?? ""),
+        phone: String(data.get("phone") ?? ""),
+        note: String(data.get("note") ?? ""),
+        consent: (data.get("consent") === "on") as true,
+        website: String(data.get("website") ?? ""),
+      });
+      submit?.removeAttribute("disabled");
+
+      if (error) {
+        showError(errorMessage(error));
+        // El horario pudo ocuparse mientras llenaban el formulario.
+        if (error.code === "CONFLICT") loadSlots(date);
+        return;
+      }
+
+      if (successWhen) {
+        successWhen.textContent = `${dayLong.format(asDate(date))} a las ${formatClock(time)}`;
+      }
+      form.classList.add("hidden");
+      success?.classList.remove("hidden");
+      success?.focus();
+    });
+
+    again?.addEventListener("click", () => {
+      form.reset();
+      slots.replaceChildren();
+      slotsStatus.textContent =
+        "Elige un día para ver los horarios disponibles.";
+      success?.classList.add("hidden");
+      form.classList.remove("hidden");
+    });
+  }
+
+  // --- Mensaje a la doctora ------------------------------------------------
+  const messageForm = document.querySelector<HTMLFormElement>("#message-form");
+  const messageStatus = document.querySelector<HTMLElement>("#message-status");
+
+  if (messageForm && messageStatus) {
+    const submit = messageForm.querySelector<HTMLButtonElement>(
+      "button[type=submit]",
+    );
+
+    const showStatus = (message: string, ok: boolean) => {
+      messageStatus.textContent = message;
+      messageStatus.className = `rounded-lg px-4 py-3 text-sm ${ok ? OK_CLASSES : ERROR_CLASSES}`;
+    };
+
+    messageForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const data = new FormData(messageForm);
+
+      submit?.setAttribute("disabled", "");
+      const { error } = await actions.sendMessage({
+        name: String(data.get("name") ?? ""),
+        phone: String(data.get("phone") ?? ""),
+        body: String(data.get("body") ?? ""),
+        consent: (data.get("consent") === "on") as true,
+        website: String(data.get("website") ?? ""),
+      });
+      submit?.removeAttribute("disabled");
+
+      if (error) {
+        showStatus(errorMessage(error), false);
+        return;
+      }
+      messageForm.reset();
+      showStatus("Mensaje enviado. Te responderemos por WhatsApp.", true);
     });
   }
 </script>

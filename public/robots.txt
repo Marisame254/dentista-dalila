@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /panel
 
 Sitemap: https://dentista-dalila.vercel.app/sitemap-index.xml

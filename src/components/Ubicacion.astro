@@ -1,0 +1,84 @@
+---
+import WhatsAppIcon from "./WhatsAppIcon.astro";
+import { site } from "../config/site";
+
+const fullAddress = [
+  site.address.street,
+  site.address.locality,
+  site.address.region,
+  site.address.postalCode,
+]
+  .filter(Boolean)
+  .join(", ");
+
+const mapQuery = site.geo
+  ? `${site.geo.lat},${site.geo.lng}`
+  : encodeURIComponent(fullAddress);
+const showMap = site.showMap;
+---
+
+<section id="ubicacion" class="bg-gray-50 py-16 md:py-24 dark:bg-gray-900">
+  <div class="wrap">
+    <h2 class="section-title">Ubicación y horarios</h2>
+
+    <div class:list={["mt-10 grid gap-10", showMap && "md:grid-cols-2"]}>
+      <dl
+        class:list={[
+          "grid gap-8 text-gray-700 dark:text-gray-300",
+          !showMap && "sm:grid-cols-3",
+        ]}
+      >
+        <div>
+          <dt class="font-semibold text-gray-900 dark:text-white">Dirección</dt>
+          <dd class="mt-1">{fullAddress}</dd>
+          {
+            showMap && (
+              <dd class="mt-2">
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${mapQuery}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-semibold text-teal-700 underline underline-offset-4 hover:text-teal-800 dark:text-teal-300 dark:hover:text-teal-200"
+                >
+                  Cómo llegar
+                </a>
+              </dd>
+            )
+          }
+        </div>
+        <div>
+          <dt class="font-semibold text-gray-900 dark:text-white">Horario</dt>
+          <dd class="mt-1">{site.openingHoursLabel}</dd>
+        </div>
+        <div>
+          <dt class="font-semibold text-gray-900 dark:text-white">
+            Teléfono y WhatsApp
+          </dt>
+          <dd class="mt-1">
+            <a
+              href={`https://wa.me/${site.whatsapp}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 hover:text-teal-700 dark:hover:text-teal-300"
+            >
+              <WhatsAppIcon class="h-4 w-4 text-green-700 dark:text-green-400" />
+              {site.phone}
+            </a>
+          </dd>
+        </div>
+      </dl>
+
+      {
+        showMap && (
+          <iframe
+            title={`Mapa del consultorio de la ${site.name}`}
+            src={`https://www.google.com/maps?q=${mapQuery}&z=16&output=embed`}
+            class="h-80 w-full rounded-xl border border-gray-200 dark:border-gray-800"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          />
+        )
+      }
+    </div>
+  </div>
+</section>

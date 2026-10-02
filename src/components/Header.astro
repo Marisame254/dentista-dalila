@@ -1,74 +1,71 @@
 ---
+import { Image } from "astro:assets";
 import ThemeToggle from "./ThemeToggle.astro";
+import logo from "../assets/logo.png";
+import { site } from "../config/site";
+
+const links = [
+  { href: "/#servicios", label: "Servicios" },
+  { href: "/#consultorio", label: "Consultorio" },
+  { href: "/#sobre-mi", label: "Sobre mí" },
+  { href: "/#ubicacion", label: "Ubicación" },
+];
 ---
 
 <header
-  class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md dark:shadow-gray-900/50 fixed w-full top-0 z-50 transition-colors duration-300"
+  class="fixed top-0 z-50 w-full border-b border-gray-200 bg-white/90 backdrop-blur-md dark:border-gray-800 dark:bg-gray-950/90"
 >
-  <nav class="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+  <nav class="wrap py-3" aria-label="Principal">
     <div class="flex items-center justify-between">
       <!-- Logo/Brand -->
-      <a href="#inicio" class="flex items-center space-x-2 group">
-        <img
-          src="/favicon.png"
-          alt="Logo Dra. Dalila"
-          width="32"
-          height="32"
-          class="w-10 h-10 transition-transform duration-300 group-hover:scale-110"
+      <a href="/#inicio" class="flex items-center gap-2.5">
+        <Image
+          src={logo}
+          alt=""
+          width={40}
+          height={40}
+          class="h-10 w-10 rounded-full"
+          loading="eager"
         />
-        <!-- <svg
-          class="w-8 h-8 text-teal-600 dark:text-teal-400 transition-transform duration-300 group-hover:scale-110"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          ></path>
-        </svg> -->
         <span
-          class="text-2xl font-bold text-gray-800 dark:text-white transition-colors"
-          >Dra. Dalila</span
+          class="font-display text-2xl font-medium tracking-tight text-gray-900 dark:text-white"
+          >{site.name}</span
         >
       </a>
 
       <!-- Navigation Links -->
-      <div class="hidden md:flex items-center space-x-6">
-        <a
-          href="#inicio"
-          class="text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-teal-600 dark:after:bg-teal-400 after:transition-all hover:after:w-full"
-          >Inicio</a
-        >
-        <a
-          href="#servicios"
-          class="text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-teal-600 dark:after:bg-teal-400 after:transition-all hover:after:w-full"
-          >Servicios</a
-        >
-        <a
-          href="#citas"
-          class="bg-teal-600 dark:bg-teal-500 text-white px-6 py-2 rounded-full hover:bg-teal-700 dark:hover:bg-teal-600 transition-all duration-300 font-medium shadow-lg shadow-teal-600/25 dark:shadow-teal-500/25 hover:shadow-xl hover:shadow-teal-600/30 dark:hover:shadow-teal-500/30 hover:-translate-y-0.5"
-        >
-          Agendar Cita
-        </a>
+      <div class="hidden items-center gap-7 md:flex">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class="text-[15px] font-medium text-gray-700 transition-colors hover:text-teal-700 dark:text-gray-300 dark:hover:text-teal-300"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+        <a href="/#citas" class="btn btn-primary btn-sm">Agendar cita</a>
         <ThemeToggle />
       </div>
 
       <!-- Mobile Menu Button & Theme Toggle -->
-      <div class="flex items-center space-x-3 md:hidden">
+      <div class="flex items-center gap-3 md:hidden">
         <ThemeToggle />
         <button
           id="mobile-menu-button"
-          class="text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 focus:outline-none transition-colors"
+          type="button"
+          class="rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
           aria-label="Abrir menú"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
         >
           <svg
-            class="w-6 h-6"
+            class="h-6 w-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -83,25 +80,20 @@ import ThemeToggle from "./ThemeToggle.astro";
     <!-- Mobile Menu -->
     <div
       id="mobile-menu"
-      class="hidden md:hidden mt-4 pb-4 border-t border-gray-200 dark:border-gray-700 pt-4"
+      class="mt-3 hidden border-t border-gray-200 pt-3 md:hidden dark:border-gray-800"
     >
-      <div class="flex flex-col space-y-4">
-        <a
-          href="#inicio"
-          class="text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium"
-          >Inicio</a
-        >
-        <a
-          href="#servicios"
-          class="text-gray-700 dark:text-gray-300 hover:text-teal-600 dark:hover:text-teal-400 transition-colors font-medium"
-          >Servicios</a
-        >
-        <a
-          href="#citas"
-          class="bg-teal-600 dark:bg-teal-500 text-white px-6 py-2 rounded-full hover:bg-teal-700 dark:hover:bg-teal-600 transition-colors font-medium text-center"
-        >
-          Agendar Cita
-        </a>
+      <div class="flex flex-col gap-1">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class="rounded-lg px-2 py-2.5 font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+            >
+              {link.label}
+            </a>
+          ))
+        }
+        <a href="/#citas" class="btn btn-primary mt-2">Agendar cita</a>
       </div>
     </div>
   </nav>
@@ -111,15 +103,18 @@ import ThemeToggle from "./ThemeToggle.astro";
   const mobileMenuButton = document.getElementById("mobile-menu-button");
   const mobileMenu = document.getElementById("mobile-menu");
 
+  function setMenuOpen(open: boolean) {
+    mobileMenu?.classList.toggle("hidden", !open);
+    mobileMenuButton?.setAttribute("aria-expanded", String(open));
+  }
+
   mobileMenuButton?.addEventListener("click", () => {
-    mobileMenu?.classList.toggle("hidden");
+    setMenuOpen(mobileMenu?.classList.contains("hidden") ?? false);
   });
 
   // Close mobile menu when clicking on a link
   const mobileLinks = mobileMenu?.querySelectorAll("a");
   mobileLinks?.forEach((link) => {
-    link.addEventListener("click", () => {
-      mobileMenu?.classList.add("hidden");
-    });
+    link.addEventListener("click", () => setMenuOpen(false));
   });
 </script>

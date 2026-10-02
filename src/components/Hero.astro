@@ -1,153 +1,65 @@
 ---
-
+import { Image } from "astro:assets";
+import consultorio from "../assets/consultorio.png";
+import { site } from "../config/site";
 ---
 
 <section
   id="inicio"
-  class="relative min-h-screen flex items-center overflow-hidden"
+  class="bg-teal-50/60 pt-28 pb-16 md:pt-36 md:pb-24 dark:bg-gray-900"
 >
-  <!-- Background Image -->
-  <div class="absolute inset-0 z-0">
-    <img
-      src="/hero-bg.png"
-      alt="Consultorio dental"
-      class="w-full h-full object-cover"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <!-- Gradient Overlay -->
-    <div
-      class="absolute inset-0 bg-linear-to-r from-gray-900/95 via-gray-900/80 to-gray-900/60 dark:from-gray-950/98 dark:via-gray-950/90 dark:to-gray-950/70"
-    >
-    </div>
-    <!-- Decorative pattern overlay -->
-    <div
-      class="absolute inset-0 opacity-5"
-      style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"
-    >
-    </div>
-  </div>
-
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
-      <!-- Text Content -->
-      <div class="space-y-8 text-center lg:text-left">
-        <h1
-          class="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight animate-fade-in delay-100"
-        >
-          Tu sonrisa perfecta
-          <span class="block mt-2">
-            comienza con
-            <span class="text-teal-400 relative inline-block">Dra. Dalila</span>
-          </span>
-        </h1>
-
-        <p
-          class="text-lg md:text-xl text-gray-300 leading-relaxed max-w-xl mx-auto lg:mx-0 animate-fade-in delay-200"
-        >
-          Cuidado dental profesional con tecnología de vanguardia y un trato
-          humano excepcional. Más de 10 años transformando sonrisas.
-        </p>
-
-        <!-- CTA Buttons -->
-        <div
-          class="flex flex-col sm:flex-row gap-4 pt-4 animate-fade-in delay-300 justify-center lg:justify-start"
-        >
-          <a
-            href="#citas"
-            class="group bg-teal-500 text-white px-8 py-4 rounded-full hover:bg-teal-400 transition-all duration-300 text-center font-semibold shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 transform hover:-translate-y-1 flex items-center justify-center gap-2"
-          >
-            Agendar Cita Ahora
-            <svg
-              class="w-5 h-5 transition-transform group-hover:translate-x-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-            </svg>
-          </a>
-          <a
-            href="#servicios"
-            class="bg-white/10 backdrop-blur-sm text-white border border-white/20 px-8 py-4 rounded-full hover:bg-white/20 transition-all duration-300 text-center font-semibold"
-          >
-            Ver Servicios
-          </a>
-        </div>
-
-        <!-- Stats -->
-        <div
-          class="grid grid-cols-2 gap-6 pt-8 animate-fade-in delay-400 max-w-md mx-auto lg:mx-0"
-        >
-          <div class="text-center lg:text-left">
-            <p class="text-3xl md:text-4xl font-bold text-white">500+</p>
-            <p class="text-sm text-gray-400 mt-1">Pacientes felices</p>
-          </div>
-          <div class="text-center lg:text-left">
-            <p class="text-3xl md:text-4xl font-bold text-white">10+</p>
-            <p class="text-sm text-gray-400 mt-1">Años de experiencia</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right side - Floating card -->
-      <div class="hidden lg:flex justify-center animate-slide-in-right">
-        <div class="relative">
-          <!-- Image/Visual -->
-          <div class="relative animate-slide-in-right">
-            <div
-              class="relative z-10 rounded-3xl overflow-hidden shadow-2xl dark:shadow-teal-500/10 bg-linear-to-br from-teal-100 to-blue-100 dark:from-teal-900/30 dark:to-blue-900/30 aspect-square flex items-center justify-center ring-1 ring-gray-200 dark:ring-gray-700"
-            >
-              <img
-                src="/consul.png"
-                alt="Consultorio dental de la Dra. Dalila"
-                class="w-full h-full object-cover transition-transform duration-700 hover:scale-100"
-                width="400"
-                height="400"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-
-            <!-- Decorative elements -->
-            <div
-              class="absolute -top-4 -right-4 w-24 h-24 bg-teal-500/20 rounded-full blur-2xl"
-            >
-            </div>
-            <div
-              class="absolute -bottom-4 -left-4 w-32 h-32 bg-blue-500/20 rounded-full blur-2xl"
-            >
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Scroll indicator -->
-    <div
-      class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden md:block"
-    >
-      <a
-        href="#servicios"
-        class="text-white/60 hover:text-white transition-colors"
+  <div class="wrap grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+    <!-- Text Content -->
+    <div>
+      <h1
+        class="font-display text-4xl font-medium leading-[1.08] tracking-tight text-gray-900 sm:text-5xl lg:text-6xl dark:text-white"
       >
-        <svg
-          class="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-        </svg>
-      </a>
+        Tu dentista de confianza en {site.address.locality}
+      </h1>
+
+      <p
+        class="mt-6 max-w-xl text-lg leading-relaxed text-gray-700 dark:text-gray-300"
+      >
+        En el consultorio de la {site.name} recibes atención personal, sin
+        prisas y con explicaciones claras antes de cada tratamiento.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href="#citas" class="btn btn-primary">Agendar cita</a>
+        <a href="#servicios" class="btn btn-secondary">Ver servicios</a>
+      </div>
+
+      <!-- Stats -->
+      {
+        site.stats.length > 0 && (
+          <dl class="mt-10 flex gap-10 border-t border-teal-900/10 pt-6 dark:border-gray-800">
+            {site.stats.map((stat) => (
+              <div class="flex flex-col-reverse">
+                <dt class="mt-0.5 text-sm text-gray-600 dark:text-gray-400">
+                  {stat.label}
+                </dt>
+                <dd class="font-display text-3xl font-medium text-gray-900 dark:text-white">
+                  {stat.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+    </div>
+
+    <!-- Photo of the practice -->
+    <div class="mx-auto w-full max-w-md lg:max-w-none">
+      <Image
+        src={consultorio}
+        alt={`La ${site.name} atendiendo a una paciente en su consultorio`}
+        widths={[400, 640, 900]}
+        sizes="(min-width: 1024px) 40vw, 90vw"
+        class="aspect-[4/5] w-full rounded-2xl object-cover"
+        loading="eager"
+        fetchpriority="high"
+      />
     </div>
   </div>
 </section>

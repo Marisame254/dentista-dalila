@@ -1,160 +1,83 @@
 # Sitio Web - Consultorio Dental Dra. Dalila
 
-Página web estática profesional para el consultorio dental de la Dra. Dalila, construida con Astro y Tailwind CSS.
+Sitio del consultorio dental de la Dra. Dalila, construido con Astro, Tailwind CSS y Supabase, desplegado en Vercel.
 
 ## Características
 
-- Landing page moderna y atractiva
-- Sección de servicios dentales
-- Integración con Calendly para agendar citas
-- Botón flotante de WhatsApp para contacto directo
-- Diseño responsive y optimizado para móviles
-- SEO optimizado
-- Rendimiento excepcional
+- Página pública con servicios, consultorio, preguntas frecuentes y ubicación
+- Solicitud de citas en línea: el paciente elige día y hora, la doctora confirma
+- Panel privado (`/panel`) con la agenda, las solicitudes pendientes y los mensajes de pacientes
+- Avisos al paciente por WhatsApp con el texto ya escrito
+- Modo claro y oscuro, SEO local con datos estructurados
 
-## Configuración Inicial
+## Puesta en marcha
 
-### 1. Configurar WhatsApp y Calendly
-
-Edita el archivo `src/pages/index.astro` y actualiza las siguientes constantes con tu información:
-
-```javascript
-const WHATSAPP_NUMBER = "521234567890"; // Tu número con código de país
-const CALENDLY_URL = "https://calendly.com/tu-usuario"; // Tu URL de Calendly
-```
-
-**Para WhatsApp:**
-- Formato: Código de país + número (sin espacios, guiones ni paréntesis)
-- Ejemplo México: `521234567890`
-- Ejemplo USA: `11234567890`
-
-**Para Calendly:**
-- Inicia sesión en tu cuenta de Calendly
-- Ve a "Event Types" y copia el enlace de tu evento
-- Ejemplo: `https://calendly.com/dra-dalila/consulta`
-
-### 2. Instalar Dependencias
+### 1. Instalar dependencias
 
 ```bash
 pnpm install
 ```
 
-### 3. Iniciar Servidor de Desarrollo
+### 2. Datos del consultorio
+
+Todo se edita en `src/config/site.ts`: nombre, teléfono, dirección, horarios, duración de las citas, servicios, preguntas frecuentes y testimonios. Los valores marcados con `REEMPLAZAR` son de ejemplo.
+
+### 3. Base de datos (Supabase)
+
+1. Crea un proyecto gratuito en [supabase.com](https://supabase.com).
+2. En **SQL Editor**, pega y ejecuta el contenido de `supabase/migrations/0001_init.sql`.
+3. En **Authentication > Users**, crea el usuario de la doctora (correo y contraseña).
+4. En **SQL Editor**, dale acceso al panel (cambia el correo):
+
+   ```sql
+   insert into public.panel_users (user_id)
+   select id from auth.users where email = 'correo-de-la-doctora@ejemplo.com';
+   ```
+
+5. En **Authentication > Sign In / Providers**, desactiva "Allow new users to sign up".
+6. Copia `.env.example` como `.env` y llena las tres variables. Agrega las mismas en Vercel (**Settings > Environment Variables**).
+
+Sin estas variables el sitio funciona, pero el formulario de citas pide agendar por WhatsApp y el panel no abre.
+
+### 4. Servidor de desarrollo
 
 ```bash
 pnpm dev
 ```
 
-El sitio estará disponible en `http://localhost:4321`
+El sitio queda en `http://localhost:4321` y el panel en `http://localhost:4321/panel`.
 
-## Comandos Disponibles
+## Comandos
 
 | Comando | Acción |
 |---------|--------|
-| `pnpm install` | Instala las dependencias |
-| `pnpm dev` | Inicia servidor de desarrollo en `localhost:4321` |
-| `pnpm build` | Construye el sitio para producción en `./dist/` |
-| `pnpm preview` | Vista previa del build de producción |
+| `pnpm dev` | Servidor de desarrollo |
+| `pnpm astro check` | Revisión de tipos |
+| `pnpm build` | Build de producción para Vercel |
 
-## Personalización
+En Windows, `pnpm build` falla en el último paso con `EPERM ... symlink` si no está activado el Modo de desarrollador. El build de Vercel no tiene ese problema.
 
-### Cambiar Colores
+## Cómo funcionan las citas
 
-Los colores principales están definidos usando Tailwind CSS. Para cambiar el esquema de colores:
+1. El paciente elige servicio, día y hora. Solo ve los horarios libres según `openingHours`, las citas activas y los bloqueos.
+2. La solicitud llega al panel como **pendiente** y ese horario deja de ofrecerse.
+3. La doctora la confirma, la reprograma o la rechaza, y avisa al paciente con el botón de WhatsApp.
+4. Desde el panel también puede crear citas a mano y bloquear horarios (vacaciones, comida, días festivos).
 
-- **Color principal (teal)**: Reemplaza `teal-*` con otro color de Tailwind (ej: `blue-*`, `purple-*`)
-- Los colores se usan en:
-  - `src/components/Header.astro`
-  - `src/components/Hero.astro`
-  - `src/components/Services.astro`
-  - `src/components/Appointments.astro`
-
-### Modificar Servicios
-
-Edita el array `services` en `src/components/Services.astro`:
-
-```javascript
-const services = [
-  {
-    icon: `<path...>`,
-    title: "Tu Servicio",
-    description: "Descripción del servicio"
-  },
-  // ... más servicios
-];
-```
-
-### Cambiar Textos
-
-- **Nombre del consultorio**: Busca "Dra. Dalila" en los archivos y reemplázalo
-- **Textos de la landing**: Edita `src/components/Hero.astro`
-- **Footer**: Edita `src/components/Footer.astro`
-
-## Despliegue
-
-### Netlify (Recomendado)
-
-1. Conecta tu repositorio en [Netlify](https://netlify.com)
-2. Configura el build:
-   - Build command: `pnpm build`
-   - Publish directory: `dist`
-3. Despliega
-
-### Vercel
-
-1. Conecta tu repositorio en [Vercel](https://vercel.com)
-2. Vercel detectará automáticamente Astro
-3. Despliega
-
-### GitHub Pages
-
-```bash
-pnpm build
-# Sube la carpeta dist/ a tu repositorio
-```
-
-## Estructura del Proyecto
+## Estructura
 
 ```
 /
-├── public/          # Archivos estáticos (imágenes, favicon, etc.)
-├── src/
-│   ├── components/  # Componentes reutilizables
-│   │   ├── Header.astro
-│   │   ├── Footer.astro
-│   │   ├── Hero.astro
-│   │   ├── Services.astro
-│   │   ├── Appointments.astro
-│   │   └── WhatsAppButton.astro
-│   ├── layouts/     # Layouts de página
-│   │   └── Layout.astro
-│   ├── pages/       # Páginas del sitio
-│   │   └── index.astro
-│   └── styles/      # Estilos globales
-│       └── global.css
-└── package.json
+├── public/                # Favicon, imagen para redes, robots.txt
+├── supabase/migrations/   # Tablas y permisos de la base de datos
+└── src/
+    ├── actions/           # Acciones públicas: horarios, solicitar cita, mensaje
+    ├── assets/            # Fotos (se optimizan al compilar)
+    ├── components/        # Secciones de la página y tarjetas del panel
+    ├── config/site.ts     # Datos del consultorio
+    ├── layouts/           # Layout público y del panel
+    ├── lib/               # Horarios, formato, Supabase, lógica del panel
+    ├── middleware.ts      # Protege /panel
+    ├── pages/             # index, privacidad y panel/*
+    └── styles/global.css  # Tipografía y clases compartidas
 ```
-
-## Optimizaciones Aplicadas
-
-- HTML estático generado en build time
-- Lazy loading de scripts
-- Optimización de imágenes automática
-- CSS minificado
-- Componentes modulares y reutilizables
-- Accesibilidad web (WCAG)
-- SEO optimizado con meta tags
-
-## Soporte
-
-Para más información sobre Astro: [https://docs.astro.build](https://docs.astro.build)
-
-## Próximos Pasos Recomendados
-
-1. Agregar imágenes reales del consultorio en `public/images/`
-2. Personalizar el favicon en `public/`
-3. Agregar testimonios de pacientes
-4. Incluir galería de antes/después
-5. Agregar sección de preguntas frecuentes (FAQ)
-6. Configurar Google Analytics
-7. Agregar schema markup para SEO local

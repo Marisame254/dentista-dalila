@@ -1,0 +1,237 @@
+---
+import PanelLayout from "../../layouts/PanelLayout.astro";
+import AppointmentCard from "../../components/panel/AppointmentCard.astro";
+import { site } from "../../config/site";
+import { formatDateTime } from "../../lib/format";
+import { handlePanelPost } from "../../lib/panel";
+import { addDays, utcToZoned, zonedToUtc } from "../../lib/slots";
+import {
+  STATUS_LABELS,
+  type Appointment,
+  type AppointmentStatus,
+  type BlockedTime,
+} from "../../lib/types";
+
+export const prerender = false;
+
+const response = await handlePanelPost(Astro);
+if (response) return response;
+
+const supabase = Astro.locals.supabase!;
+const today = utcToZoned(new Date()).date;
+const MAX_ROWS = 100;
+
+// Filtros (?estado=&desde=)
+const params = Astro.url.searchParams;
+const statusParam = params.get("estado") ?? "";
+const status = statusParam in STATUS_LABELS ? (statusParam as AppointmentStatus) : null;
+const fromParam = params.get("desde") ?? "";
+const from = /^\d{4}-\d{2}-\d{2}$/.test(fromParam) ? fromParam : addDays(today, -30);
+
+let query = supabase
+  .from("appointments")
+  .select("*")
+  .gte("starts_at", zonedToUtc(from, "00:00").toISOString())
+  .order("starts_at", { ascending: false })
+  .limit(MAX_ROWS);
+if (status) query = query.eq("status", status);
+
+const [appointmentsResult, blocksResult] = await Promise.all([
+  query,
+  supabase
+    .from("blocked_times")
+    .select("*")
+    .gte("ends_at", new Date().toISOString())
+    .order("starts_at"),
+]);
+
+const loadError = appointmentsResult.error ?? blocksResult.error;
+const appointments = (appointmentsResult.data ?? []) as Appointment[];
+const blocks = (blocksResult.data ?? []) as BlockedTime[];
+---
+
+<PanelLayout title="Citas">
+  {
+    loadError && (
+      <p
+        role="alert"
+        class="mb-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-950 dark:text-red-200"
+      >
+        No se pudieron cargar las citas. Recarga la página.
+      </p>
+    )
+  }
+
+  <div class="grid gap-4 lg:grid-cols-2">
+    <!-- Nueva cita -->
+    <details class="card p-5">
+      <summary
+        class="cursor-pointer text-lg font-semibold text-gray-900 dark:text-white"
+      >
+        Crear cita
+      </summary>
+      <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+        Para pacientes que agendan por teléfono o en persona. Queda confirmada.
+      </p>
+      <form method="POST" class="mt-4 grid gap-4 sm:grid-cols-2">
+        <input type="hidden" name="intent" value="appointment-create" />
+        <label class="sm:col-span-2">
+          <span class="label">Nombre del paciente</span>
+          <input type="text" name="name" class="field" maxlength="80" required />
+        </label>
+        <label>
+          <span class="label">Teléfono</span>
+          <input type="tel" name="phone" class="field" maxlength="20" required />
+        </label>
+        <label>
+          <span class="label">Servicio</span>
+          <select name="service" class="field" required>
+            {site.services.map((service) => <option>{service}</option>)}
+          </select>
+        </label>
+        <label>
+          <span class="label">Día</span>
+          <input type="date" name="date" class="field" min={today} required />
+        </label>
+        <label>
+          <span class="label">Hora</span>
+          <input type="time" name="time" class="field" step="300" required />
+        </label>
+        <label>
+          <span class="label">Duración (minutos)</span>
+          <input
+            type="number"
+            name="duration"
+            class="field"
+            min="10"
+            max="480"
+            step="5"
+            value={site.booking.slotMinutes}
+            required
+          />
+        </label>
+        <label class="sm:col-span-2">
+          <span class="label">Nota interna (opcional)</span>
+          <textarea name="admin_note" class="field" rows="2" maxlength="2000"
+          ></textarea>
+        </label>
+        <div class="sm:col-span-2">
+          <button type="submit" class="btn btn-primary">Crear cita</button>
+        </div>
+      </form>
+    </details>
+
+    <!-- Bloqueos -->
+    <details class="card p-5" open={blocks.length > 0}>
+      <summary
+        class="cursor-pointer text-lg font-semibold text-gray-900 dark:text-white"
+      >
+        Bloquear horario
+      </summary>
+      <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+        Vacaciones, comida o días festivos. Esos horarios dejan de ofrecerse en
+        la página.
+      </p>
+      <form method="POST" class="mt-4 grid gap-4 sm:grid-cols-2">
+        <input type="hidden" name="intent" value="block-create" />
+        <label>
+          <span class="label">Desde el día</span>
+          <input type="date" name="date_from" class="field" min={today} required />
+        </label>
+        <label>
+          <span class="label">Hora</span>
+          <input type="time" name="time_from" class="field" value="09:00" required />
+        </label>
+        <label>
+          <span class="label">Hasta el día</span>
+          <input type="date" name="date_to" class="field" min={today} required />
+        </label>
+        <label>
+          <span class="label">Hora</span>
+          <input type="time" name="time_to" class="field" value="18:00" required />
+        </label>
+        <label class="sm:col-span-2">
+          <span class="label">Motivo (opcional)</span>
+          <input type="text" name="reason" class="field" maxlength="200" />
+        </label>
+        <div class="sm:col-span-2">
+          <button type="submit" class="btn btn-primary">Bloquear horario</button>
+        </div>
+      </form>
+
+      {
+        blocks.length > 0 && (
+          <ul class="mt-5 divide-y divide-gray-200 border-t border-gray-200 dark:divide-gray-800 dark:border-gray-800">
+            {blocks.map((block) => (
+              <li class="flex items-center justify-between gap-3 py-3 text-sm">
+                <span class="text-gray-700 dark:text-gray-300">
+                  {formatDateTime(block.starts_at)} a{" "}
+                  {formatDateTime(block.ends_at)}
+                  {block.reason && (
+                    <span class="block text-gray-500">{block.reason}</span>
+                  )}
+                </span>
+                <form method="POST">
+                  <input type="hidden" name="intent" value="block-delete" />
+                  <input type="hidden" name="id" value={block.id} />
+                  <button type="submit" class="btn btn-sm btn-danger">
+                    Quitar
+                  </button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </details>
+  </div>
+
+  <section class="mt-10">
+    <h1 class="font-display text-2xl font-medium text-gray-900 dark:text-white">
+      Todas las citas
+    </h1>
+
+    <form method="GET" class="mt-4 flex flex-wrap items-end gap-3">
+      <label>
+        <span class="label">Estado</span>
+        <select name="estado" class="field">
+          <option value="">Todos</option>
+          {
+            Object.entries(STATUS_LABELS).map(([value, label]) => (
+              <option value={value} selected={value === status}>
+                {label}
+              </option>
+            ))
+          }
+        </select>
+      </label>
+      <label>
+        <span class="label">Desde</span>
+        <input type="date" name="desde" class="field" value={from} />
+      </label>
+      <button type="submit" class="btn btn-secondary">Filtrar</button>
+    </form>
+
+    {
+      appointments.length === 0 ? (
+        <p class="mt-6 text-gray-600 dark:text-gray-400">
+          No hay citas con estos filtros.
+        </p>
+      ) : (
+        <div class="mt-6 grid gap-4 lg:grid-cols-2">
+          {appointments.map((appointment) => (
+            <AppointmentCard appointment={appointment} />
+          ))}
+        </div>
+      )
+    }
+    {
+      appointments.length === MAX_ROWS && (
+        <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">
+          Se muestran las {MAX_ROWS} citas más recientes. Usa los filtros para
+          ver otras.
+        </p>
+      )
+    }
+  </section>
+</PanelLayout>

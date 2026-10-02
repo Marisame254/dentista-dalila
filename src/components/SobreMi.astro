@@ -1,0 +1,40 @@
+---
+import { Image } from "astro:assets";
+import radiografia from "../assets/radiografia.jpg";
+import { site } from "../config/site";
+
+const { paragraphs, credentials, cedula } = site.about;
+---
+
+<section id="sobre-mi" class="py-16 md:py-24">
+  <div class="wrap grid items-center gap-12 md:grid-cols-[0.8fr_1.2fr]">
+    <Image
+      src={radiografia}
+      alt={`La ${site.name} revisando una radiografía con una paciente`}
+      widths={[360, 540, 760]}
+      sizes="(min-width: 768px) 35vw, 90vw"
+      class="aspect-[4/5] w-full max-w-sm rounded-2xl object-cover md:max-w-none"
+    />
+
+    <div>
+      <h2 class="section-title">Sobre la {site.name}</h2>
+
+      <div
+        class="mt-5 max-w-[62ch] space-y-4 text-lg leading-relaxed text-gray-700 dark:text-gray-300"
+      >
+        {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+
+      {
+        (credentials.length > 0 || cedula) && (
+          <ul class="mt-6 space-y-2 border-t border-gray-200 pt-6 text-gray-700 dark:border-gray-800 dark:text-gray-300">
+            {credentials.map((credential) => (
+              <li>{credential}</li>
+            ))}
+            {cedula && <li>Cédula profesional {cedula}</li>}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</section>

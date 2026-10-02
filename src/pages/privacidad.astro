@@ -1,0 +1,86 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { site } from "../config/site";
+
+const fullAddress = [
+  site.address.street,
+  site.address.locality,
+  site.address.region,
+  site.address.postalCode,
+]
+  .filter(Boolean)
+  .join(", ");
+---
+
+<Layout
+  title={`Aviso de privacidad | ${site.name}`}
+  description={`Aviso de privacidad del consultorio dental de la ${site.name}.`}
+>
+  <Header />
+
+  <main class="wrap pt-28 pb-16 md:pt-36 md:pb-24">
+    <article
+      class="max-w-[68ch] space-y-5 leading-relaxed text-gray-700 dark:text-gray-300"
+    >
+      <h1
+        class="font-display text-4xl font-medium tracking-tight text-gray-900 dark:text-white"
+      >
+        Aviso de privacidad
+      </h1>
+
+      <p>
+        {site.legalName}, con domicilio en {fullAddress}, es responsable del
+        uso y la protección de los datos personales que nos proporcionas a
+        través de este sitio.
+      </p>
+
+      <h2 class="pt-3 text-xl font-semibold text-gray-900 dark:text-white">
+        Qué datos recabamos
+      </h2>
+      <p>
+        Al solicitar una cita o enviarnos un mensaje te pedimos tu nombre, tu
+        número de teléfono y, si decides escribirlo, el motivo de tu consulta.
+      </p>
+
+      <h2 class="pt-3 text-xl font-semibold text-gray-900 dark:text-white">
+        Para qué los usamos
+      </h2>
+      <ul class="list-disc space-y-1 pl-5">
+        <li>Agendar, confirmar o reprogramar tu cita.</li>
+        <li>Contactarte por WhatsApp o por teléfono sobre tu cita o tu mensaje.</li>
+        <li>Llevar el registro de las citas del consultorio.</li>
+      </ul>
+      <p>
+        No usamos tus datos para publicidad ni los compartimos con terceros,
+        salvo los proveedores de tecnología que alojan este sitio y su base de
+        datos, o cuando una autoridad lo requiera conforme a la ley.
+      </p>
+
+      <h2 class="pt-3 text-xl font-semibold text-gray-900 dark:text-white">
+        Tus derechos
+      </h2>
+      <p>
+        Puedes acceder a tus datos, rectificarlos, cancelarlos u oponerte a su
+        uso (derechos ARCO) en cualquier momento. Para hacerlo, escríbenos por
+        WhatsApp al
+        <a
+          href={`https://wa.me/${site.whatsapp}`}
+          class="font-semibold text-teal-700 underline underline-offset-2 dark:text-teal-300"
+          >{site.phone}</a
+        >{site.email && <> o al correo {site.email}</>}.
+      </p>
+
+      <h2 class="pt-3 text-xl font-semibold text-gray-900 dark:text-white">
+        Cambios a este aviso
+      </h2>
+      <p>
+        Cualquier cambio a este aviso de privacidad se publicará en esta misma
+        página.
+      </p>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>

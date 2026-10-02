@@ -1,0 +1,111 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { site } from "../../config/site";
+import { isSupabaseConfigured } from "../../lib/supabase";
+
+export const prerender = false;
+
+const supabase = Astro.locals.supabase;
+let error = "";
+let email = "";
+
+if (Astro.request.method === "POST" && supabase) {
+  const form = await Astro.request.formData();
+  email = String(form.get("email") ?? "").trim();
+  const password = String(form.get("password") ?? "");
+
+  const { data, error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (signInError || !data.user) {
+    error = "Correo o contraseña incorrectos.";
+  } else {
+    const { data: panelUser } = await supabase
+      .from("panel_users")
+      .select("user_id")
+      .eq("user_id", data.user.id)
+      .maybeSingle();
+
+    if (panelUser) return Astro.redirect("/panel");
+
+    await supabase.auth.signOut();
+    error = "Esta cuenta no tiene acceso al panel.";
+  }
+}
+---
+
+<Layout title={`Entrar al panel | ${site.name}`} noindex>
+  <main
+    class="flex min-h-screen items-center justify-center bg-gray-50 px-5 py-12 dark:bg-gray-950"
+  >
+    <div class="card w-full max-w-sm p-7">
+      <h1
+        class="font-display text-2xl font-medium text-gray-900 dark:text-white"
+      >
+        Panel de {site.name}
+      </h1>
+
+      {
+        isSupabaseConfigured ? (
+          <form method="POST" class="mt-6 space-y-5">
+            <div>
+              <label for="email" class="label">
+                Correo
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                class="field"
+                autocomplete="username"
+                value={email}
+                required
+              />
+            </div>
+            <div>
+              <label for="password" class="label">
+                Contraseña
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                class="field"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+
+            {error && (
+              <p
+                role="alert"
+                class="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-950 dark:text-red-200"
+              >
+                {error}
+              </p>
+            )}
+
+            <button type="submit" class="btn btn-primary w-full">
+              Entrar
+            </button>
+          </form>
+        ) : (
+          <p class="mt-4 leading-relaxed text-gray-700 dark:text-gray-300">
+            El panel todavía no está conectado a la base de datos. Faltan las
+            variables de entorno de Supabase (ver <code>.env.example</code>).
+          </p>
+        )
+      }
+
+      <p class="mt-6 text-sm">
+        <a
+          href="/"
+          class="text-gray-600 underline underline-offset-2 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+          >Volver al sitio</a
+        >
+      </p>
+    </div>
+  </main>
+</Layout>

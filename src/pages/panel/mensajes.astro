@@ -1,0 +1,146 @@
+---
+import PanelLayout from "../../layouts/PanelLayout.astro";
+import WhatsAppIcon from "../../components/WhatsAppIcon.astro";
+import { site } from "../../config/site";
+import { firstName, formatDateTime, whatsappLink } from "../../lib/format";
+import { handlePanelPost } from "../../lib/panel";
+import type { Message } from "../../lib/types";
+
+export const prerender = false;
+
+const response = await handlePanelPost(Astro);
+if (response) return response;
+
+const supabase = Astro.locals.supabase!;
+const showArchived = Astro.url.searchParams.get("ver") === "archivados";
+const MAX_ROWS = 100;
+
+const { data, error: loadError } = await supabase
+  .from("messages")
+  .select("*")
+  .eq("archived", showArchived)
+  .order("created_at", { ascending: false })
+  .limit(MAX_ROWS);
+
+const messages = (data ?? []) as Message[];
+
+const tabs = [
+  { href: "/panel/mensajes", label: "Recibidos", current: !showArchived },
+  {
+    href: "/panel/mensajes?ver=archivados",
+    label: "Archivados",
+    current: showArchived,
+  },
+];
+---
+
+<PanelLayout title="Mensajes">
+  <h1 class="font-display text-2xl font-medium text-gray-900 dark:text-white">
+    Mensajes de pacientes
+  </h1>
+
+  <div class="mt-4 flex gap-2">
+    {
+      tabs.map((tab) => (
+        <a
+          href={tab.href}
+          aria-current={tab.current ? "page" : undefined}
+          class="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-200 aria-[current=page]:bg-gray-900 aria-[current=page]:text-white dark:text-gray-400 dark:hover:bg-gray-800 dark:aria-[current=page]:bg-white dark:aria-[current=page]:text-gray-950"
+        >
+          {tab.label}
+        </a>
+      ))
+    }
+  </div>
+
+  {
+    loadError && (
+      <p
+        role="alert"
+        class="mt-6 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-950 dark:text-red-200"
+      >
+        No se pudieron cargar los mensajes. Recarga la página.
+      </p>
+    )
+  }
+
+  {
+    messages.length === 0 ? (
+      <p class="mt-6 text-gray-600 dark:text-gray-400">
+        {showArchived
+          ? "No hay mensajes archivados."
+          : "No hay mensajes. Los que envíen desde la página aparecerán aquí."}
+      </p>
+    ) : (
+      <div class="mt-6 grid gap-4 lg:grid-cols-2">
+        {messages.map((message) => {
+          const unread = !message.read_at;
+          return (
+            <article
+              class:list={[
+                "card p-5",
+                unread && "border-l-4 border-l-teal-700 dark:border-l-teal-400",
+              ]}
+            >
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4">
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                  {message.name}
+                  {unread && (
+                    <span class="ml-2 text-sm font-medium text-teal-800 dark:text-teal-300">
+                      Nuevo
+                    </span>
+                  )}
+                </h2>
+                <time
+                  datetime={message.created_at}
+                  class="text-sm text-gray-500"
+                >
+                  {formatDateTime(message.created_at)}
+                </time>
+              </div>
+
+              <p class="mt-3 whitespace-pre-line text-gray-700 dark:text-gray-300">
+                {message.body}
+              </p>
+
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a
+                  href={whatsappLink(
+                    message.phone,
+                    `Hola ${firstName(message.name)}, soy la ${site.name}. Recibí tu mensaje.`,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-sm btn-whatsapp"
+                >
+                  <WhatsAppIcon class="h-4 w-4" />
+                  Responder por WhatsApp
+                </a>
+                <form method="POST">
+                  <input type="hidden" name="intent" value="message-read" />
+                  <input type="hidden" name="id" value={message.id} />
+                  <input type="hidden" name="read" value={unread ? "1" : "0"} />
+                  <button type="submit" class="btn btn-sm btn-secondary">
+                    {unread ? "Marcar como leído" : "Marcar como no leído"}
+                  </button>
+                </form>
+                <form method="POST">
+                  <input type="hidden" name="intent" value="message-archive" />
+                  <input type="hidden" name="id" value={message.id} />
+                  <input
+                    type="hidden"
+                    name="archived"
+                    value={showArchived ? "0" : "1"}
+                  />
+                  <button type="submit" class="btn btn-sm btn-secondary">
+                    {showArchived ? "Mover a recibidos" : "Archivar"}
+                  </button>
+                </form>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    )
+  }
+</PanelLayout>

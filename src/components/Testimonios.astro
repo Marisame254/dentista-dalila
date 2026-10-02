@@ -1,0 +1,29 @@
+---
+import { site } from "../config/site";
+
+// Solo se muestra cuando hay testimonios reales en src/config/site.ts
+const { testimonials } = site;
+---
+
+{
+  testimonials.length > 0 && (
+    <section id="testimonios" class="bg-gray-50 py-16 md:py-24 dark:bg-gray-900">
+      <div class="wrap">
+        <h2 class="section-title">Lo que dicen nuestros pacientes</h2>
+
+        <div class="mt-10 grid gap-8 md:grid-cols-3">
+          {testimonials.map((testimonial) => (
+            <figure class="border-l-2 border-teal-700 pl-5 dark:border-teal-400">
+              <blockquote class="leading-relaxed text-gray-700 dark:text-gray-300">
+                {testimonial.text}
+              </blockquote>
+              <figcaption class="mt-3 font-semibold text-gray-900 dark:text-white">
+                {testimonial.name}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
