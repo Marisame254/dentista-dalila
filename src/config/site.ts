@@ -53,7 +53,7 @@ export const site = {
   email: "",
 
   address: {
-    street: "Calle y número, Colonia", // REEMPLAZAR
+    street: "González Ortega 203, Centro", // REEMPLAZAR
     locality: "Oaxaca de Juárez", // REEMPLAZAR: ciudad
     region: "Oaxaca", // REEMPLAZAR: estado
     postalCode: "68000", // REEMPLAZAR: código postal
@@ -62,8 +62,8 @@ export const site = {
 
   /** Coordenadas de Google Maps (clic derecho > copiar lat,long). Dejar null si no se tienen. */
   geo: {
-    lat: 17.0732, // REEMPLAZAR
-    lng: -96.7266, // REEMPLAZAR
+    lat: 17.059296810067238, // REEMPLAZAR
+    lng: -96.7183293437237, // REEMPLAZAR
   } as { lat: number; lng: number } | null,
 
   /**
@@ -71,7 +71,7 @@ export const site = {
    * Poner en true SOLO cuando la dirección y las coordenadas de arriba sean las reales,
    * para no mandar pacientes a un lugar equivocado.
    */
-  showMap: false as boolean,
+  showMap: true as boolean,
 
   /** Horarios de atención */
   openingHours: [
@@ -125,7 +125,7 @@ export const site = {
   /** Cifras del Hero. REEMPLAZAR con datos reales o dejar [] para ocultarlas. */
   stats: [
     { value: "10+", label: "años de experiencia" },
-    { value: "500+", label: "pacientes atendidos" },
+    { value: "100+", label: "pacientes atendidos" },
   ] as { value: string; label: string }[],
 
   /** Sección "Sobre la doctora" */
